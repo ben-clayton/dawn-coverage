@@ -353,7 +353,7 @@
 
                         let node = {
                             test: test_children,
-                            name: parent.name ? parent.name + "." + test_name : test_name,
+                            name: parent.name ? parent.name + test_name : test_name,
                             overlaps: new Map(parent.overlaps), // map: span_id -> OVERLAP
                             children: new Map(), // map: index -> struct
                             is_leaf: test_children.length == 0,
@@ -443,7 +443,7 @@
                             }
 
                             if (do_add) {
-                                out.push(node.name + (node.is_leaf ? "" : ".*"));
+                                out.push(node.name + (node.is_leaf ? "" : "*"));
                             } else if (do_traversal) {
                                 traverse(node);
                             }
