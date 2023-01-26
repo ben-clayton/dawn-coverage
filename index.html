@@ -39,16 +39,32 @@
             background-color: #00000000;
         }
 
-        .frame {
-            display: flex;
-            left: 0px;
-            right: 0px;
-            top: 0px;
-            bottom: 0px;
-            position: absolute;
+        html {
+            height: 100vh;
+        }
+
+        body {
             font-family: monospace;
             background-color: #151515;
+            height: 100vh;
+        }
+
+        .toolbar {
+            padding: 5px;
+            top: 0;
+            bottom: 40px;
+            left: 0px;
+            right: 0px;
+        }
+
+        .frame {
+            display: flex;
+            position: absolute;
             color: #c0b070;
+            top: 40px;
+            bottom: 0px;
+            left: 0px;
+            right: 0px;
         }
 
         .left-pane {
@@ -161,10 +177,14 @@
             border-color: #f0202080;
             margin-right: -1px;
         }
+
     </style>
 </head>
 
 <body>
+    <div id="toolbar" class="toolbar">
+        <select id="datasets"></select>
+    </div>
     <div class="frame">
         <div id="file_tree" class="left-pane file-tree"></div>
         <div class="center-pane">
@@ -177,6 +197,19 @@
     </div>
 
     <script>
+        const datasets = [
+            'macos-no-validation',
+            'coverage',
+        ];
+
+        const dataset_select = document.getElementById('datasets');
+        for (const dataset of datasets) {
+            const opt = document.createElement('option');
+            opt.text = dataset;
+            opt.value = dataset + '.dat';
+            dataset_select.appendChild(opt);
+        }
+
         let current = {
             file: "",
             start_line: 0,
@@ -254,9 +287,10 @@
             readOnly: true,
         });
 
-        window.onload = function () {
+
+        const on_dataset_selcted = function () {
             el_source.doc.setValue("// Loading... ");
-            fetch("coverage.dat").then(response =>
+            fetch(dataset_select.value).then(response =>
                 response.arrayBuffer()
             ).then(compressed =>
                 pako.inflate(new Uint8Array(compressed))
@@ -527,6 +561,8 @@
                     update_selection(from, to);
                 });
 
+                el_file_tree.innerHTML = '';
+
                 for (const path of Object.keys(files)) {
                     let file = files[path];
 
@@ -563,6 +599,10 @@
                 }
             });
         };
+
+        on_dataset_selcted();
+
+        dataset_select.addEventListener('change', on_dataset_selcted);
     </script>
 </body>
 
