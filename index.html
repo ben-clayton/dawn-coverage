@@ -209,7 +209,13 @@
     </div>
 
     <script>
-      const datasets = ["windows-validation", "windows-no-validation", "macos-validation", "macos-no-validation"];
+      const datasets = [
+        "win",
+        "win_api_operation",
+        "win_api_validation",
+        "win_shader_execution",
+        "win_shader_validation",
+      ];
 
       const dataset_select = document.getElementById("datasets");
       for (const dataset of datasets) {
@@ -649,13 +655,9 @@
                 red *= normalize;
                 green *= normalize;
                 coverage.innerText = Math.round(file.p * 100);
-                coverage.style =
-                  "background-color: RGB(" +
-                  255 * red +
-                  "," +
-                  255 * green +
-                  ", 0" +
-                  ")";
+                coverage.style = `background-color: RGB(${255 * red} , ${
+                  255 * green
+                }, 0)`;
               } else {
                 coverage.innerText = "--";
                 coverage.style = "background-color: RGB(180,180,180)";
